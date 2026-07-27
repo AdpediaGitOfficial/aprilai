@@ -51,6 +51,9 @@ git pull && docker compose up -d --build app
 
 ## Option B — Bare metal (Node 22 + PM2)
 
+Use `next start` — it serves the built static assets (CSS/JS) automatically.
+This is the recommended, foolproof path.
+
 ```sh
 # 1. Node 22 (via nvm or NodeSource), then:
 git clone <repo-url> april-ai && cd april-ai
@@ -59,18 +62,23 @@ npm ci
 cp .env.example .env.local && nano .env.local   # optional keys
 npm run build
 
-# 2. The standalone server lives in .next/standalone.
-#    Copy static assets next to it (Next does not do this automatically):
-cp -r .next/static .next/standalone/.next/static
-cp -r public .next/standalone/public
-
-# 3. Run under PM2:
+# 2. Run under PM2:
 npm i -g pm2
-PORT=3000 pm2 start .next/standalone/server.js --name april-ai
-pm2 save && pm2 startup     # survive reboots
+pm2 start npm --name april-ai -- start   # runs `next start` on :3000
+pm2 save && pm2 startup                  # survive reboots
 ```
 
+Update later: `git pull && npm run build && pm2 restart april-ai`.
 Migrations (if using a DB): `npm run db:push`.
+
+> **Unstyled page? (naked HTML, no CSS)** You're serving the standalone
+> `server.js` without its static assets. Either switch to `next start` above,
+> **or** copy the assets next to the standalone server after every build:
+> ```sh
+> cp -r .next/static .next/standalone/.next/static
+> cp -r public .next/standalone/public
+> ```
+> The CSS lives under `/_next/static/…`; if that URL 404s, this is why.
 
 ---
 
