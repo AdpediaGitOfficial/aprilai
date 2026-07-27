@@ -27,6 +27,9 @@ npm run dev                  # http://localhost:3000
 
 Other scripts: `npm run build`, `npm run start`, `npm run lint`, `npm run typecheck`.
 
+**Self-hosting / VPS?** See [DEPLOY.md](./DEPLOY.md) — Docker (with optional
+pgvector Postgres) or bare-metal Node + PM2, plus an Nginx/TLS example.
+
 ### Progressive configuration
 
 Auth and persistence are **optional and env-driven** — the app runs fully with

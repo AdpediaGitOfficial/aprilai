@@ -1,0 +1,38 @@
+# April AI — VPS deployment.
+#
+#   Demo mode (no keys):     docker compose up -d --build app
+#   With local Postgres+RAG: docker compose --profile db up -d --build
+#
+# Put real secrets in .env.production (copy from .env.example). The app runs
+# fine with an empty/missing env file — every capability is optional.
+
+services:
+  app:
+    build: .
+    image: april-ai
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - path: .env.production
+        required: false
+
+  # Optional local Postgres with pgvector for persistence + RAG.
+  # Enable with:  docker compose --profile db up -d
+  # Then point the app at it in .env.production:
+  #   DATABASE_URL=postgres://april:april@db:5432/april
+  db:
+    image: pgvector/pgvector:pg16
+    profiles: ["db"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: april
+      POSTGRES_PASSWORD: april
+      POSTGRES_DB: april
+    ports:
+      - "5432:5432"
+    volumes:
+      - april-db:/var/lib/postgresql/data
+
+volumes:
+  april-db:
