@@ -1,10 +1,14 @@
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { getModel } from "@/lib/ai/provider";
 import { getSystemPrompt, type PromptKey } from "@/lib/ai/prompts";
+import { dbEnabled } from "@/lib/config";
+import { getCurrentUser } from "@/lib/auth/user";
+import { saveConversation } from "@/lib/db/conversations";
 
 export const maxDuration = 60;
 
 type ChatRequestBody = {
+  id?: string;
   messages?: unknown;
   promptKey?: PromptKey;
 };
@@ -17,12 +21,14 @@ export async function POST(request: Request) {
     return new Response("Invalid JSON body", { status: 400 });
   }
 
-  const { messages, promptKey } = body;
+  const { id, messages, promptKey = "general" } = body;
   if (!Array.isArray(messages)) {
     return new Response("Messages are required", { status: 400 });
   }
 
   try {
+    const user = await getCurrentUser();
+
     const result = streamText({
       model: getModel(),
       system: getSystemPrompt(promptKey),
@@ -31,6 +37,19 @@ export async function POST(request: Request) {
 
     return result.toUIMessageStreamResponse({
       originalMessages: messages as UIMessage[],
+      onFinish: async ({ messages: finalMessages }) => {
+        if (!dbEnabled || !id) return;
+        try {
+          await saveConversation({
+            userId: user.id,
+            conversationId: id,
+            promptKey,
+            messages: finalMessages,
+          });
+        } catch (err) {
+          console.error("[/api/chat] persist failed", err);
+        }
+      },
     });
   } catch (error) {
     console.error("[/api/chat]", error);

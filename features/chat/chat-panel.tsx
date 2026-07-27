@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { EmptyView } from "./empty-view";
 import { MessageList, type ChatContext } from "./message-list";
 import { Composer } from "./composer";
@@ -18,17 +18,22 @@ export function ChatPanel({
   promptKey = "general",
   showProCta = true,
   context = DEFAULT_CONTEXT,
+  conversationId,
+  initialMessages,
 }: {
   promptKey?: PromptKey;
   showProCta?: boolean;
   context?: ChatContext;
+  conversationId?: string;
+  initialMessages?: UIMessage[];
 }) {
   const [input, setInput] = useState("");
   const [webSearch, setWebSearch] = useState(true);
-  const [chatId, setChatId] = useState(() => crypto.randomUUID());
+  const [chatId, setChatId] = useState(() => conversationId ?? crypto.randomUUID());
 
   const { messages, sendMessage, status, stop, regenerate, setMessages } = useChat({
     id: chatId,
+    messages: initialMessages,
     transport: new DefaultChatTransport({ api: "/api/chat", body: { promptKey } }),
   });
 

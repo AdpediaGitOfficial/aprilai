@@ -1,16 +1,41 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Plus, Search, Settings, Sparkles, ChevronDown, Command as CommandIcon } from "lucide-react";
+import { Plus, Search, Settings, Sparkles, ChevronDown, Command as CommandIcon, LogOut } from "lucide-react";
+import { SignOutButton } from "@clerk/nextjs";
 import { BrandMark } from "./brand-mark";
 import { primaryNav, type NavItem } from "./nav";
 import { BRAND } from "@/lib/brand";
 import { emitNewChat } from "@/lib/events";
+import { authEnabled } from "@/lib/config";
+import type { AppUser, ConversationSummary } from "@/lib/types";
 
-export function Sidebar({ onOpenPalette }: { onOpenPalette: () => void }) {
+const SAMPLE_CHATS = [
+  "NDA review · Project Titan",
+  "Employment offer — remote",
+  "IP assignment — Q3",
+  "Delaware filing checklist",
+];
+
+export function Sidebar({
+  onOpenPalette,
+  user,
+  conversations,
+}: {
+  onOpenPalette: () => void;
+  user: AppUser;
+  conversations: ConversationSummary[];
+}) {
   const router = useRouter();
   const pathname = usePathname();
+  const initials = user.name
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   const startNewChat = () => {
     if (pathname !== "/") router.push("/");
@@ -70,19 +95,24 @@ export function Sidebar({ onOpenPalette }: { onOpenPalette: () => void }) {
 
         <Section title="Chats" action />
         <div className="mt-2 space-y-0.5">
-          {[
-            "NDA review · Project Titan",
-            "Employment offer — remote",
-            "IP assignment — Q3",
-            "Delaware filing checklist",
-          ].map((chat) => (
-            <button
-              key={chat}
-              className="w-full truncate rounded-md px-3 py-1.5 text-left text-xs text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
-            >
-              {chat}
-            </button>
-          ))}
+          {conversations.length > 0
+            ? conversations.map((c) => (
+                <Link
+                  key={c.id}
+                  href={`/?c=${c.id}`}
+                  className="block w-full truncate rounded-md px-3 py-1.5 text-left text-xs text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+                >
+                  {c.title}
+                </Link>
+              ))
+            : SAMPLE_CHATS.map((chat) => (
+                <button
+                  key={chat}
+                  className="w-full truncate rounded-md px-3 py-1.5 text-left text-xs text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+                >
+                  {chat}
+                </button>
+              ))}
         </div>
       </nav>
 
@@ -102,14 +132,37 @@ export function Sidebar({ onOpenPalette }: { onOpenPalette: () => void }) {
       </div>
 
       <div className="flex items-center gap-3 border-t border-border px-4 py-3">
-        <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-gradient-brand text-[11px] font-bold text-primary-foreground">
-          DJ
-        </div>
+        {user.imageUrl ? (
+          <Image
+            src={user.imageUrl}
+            alt={user.name}
+            width={32}
+            height={32}
+            className="size-8 shrink-0 rounded-lg object-cover"
+          />
+        ) : (
+          <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-gradient-brand text-[11px] font-bold text-primary-foreground">
+            {initials || "AA"}
+          </div>
+        )}
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium">Domain Jango</p>
-          <p className="truncate text-[11px] text-muted-foreground">Free plan · 3 credits</p>
+          <p className="truncate text-sm font-medium">{user.name}</p>
+          <p className="truncate text-[11px] text-muted-foreground">
+            {user.plan} · {user.credits} credits
+          </p>
         </div>
-        <ChevronDown className="size-4 text-muted-foreground" />
+        {authEnabled && !user.isGuest ? (
+          <SignOutButton>
+            <button
+              aria-label="Sign out"
+              className="grid size-7 place-items-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+            >
+              <LogOut className="size-4" />
+            </button>
+          </SignOutButton>
+        ) : (
+          <ChevronDown className="size-4 text-muted-foreground" />
+        )}
       </div>
     </aside>
   );

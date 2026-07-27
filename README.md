@@ -13,6 +13,8 @@ Lovable/TanStack Start into a clean, scalable, provider-agnostic architecture.
 | UI         | Tailwind CSS v4 + shadcn/ui (new-york) + lucide icons      |
 | AI         | Vercel AI SDK 7 with a swappable provider registry         |
 | Providers  | Anthropic (default) / OpenAI — switch via `AI_PROVIDER`    |
+| Auth       | Clerk (optional — enabled by env)                          |
+| Database   | Postgres + Drizzle ORM (optional — enabled by env)         |
 | Data fetch | TanStack Query                                             |
 
 ## Getting started
@@ -25,6 +27,25 @@ npm run dev                  # http://localhost:3000
 
 Other scripts: `npm run build`, `npm run start`, `npm run lint`, `npm run typecheck`.
 
+### Progressive configuration
+
+Auth and persistence are **optional and env-driven** — the app runs fully with
+no configuration (guest identity, in-memory chat) and lights up when you add the
+relevant keys:
+
+| Capability            | Turned on by                              | Then                                    |
+| --------------------- | ----------------------------------------- | --------------------------------------- |
+| AI responses          | `ANTHROPIC_API_KEY` (or `OPENAI_API_KEY`) | Chat streams real answers               |
+| Auth + route guard    | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` (+ secret) | Real users, `/sign-in`, protected app |
+| Conversation history  | `DATABASE_URL`                            | Chats persist and appear in the sidebar |
+
+With a database set, run migrations once:
+
+```sh
+npm run db:generate   # writes SQL from the schema (no DB needed)
+npm run db:push       # applies the schema to your database
+```
+
 ## Architecture
 
 ```
@@ -35,6 +56,9 @@ app/
   api/chat/route.ts # streaming chat endpoint (provider-agnostic)
   layout.tsx        # root: fonts, metadata, providers
   globals.css       # Tailwind v4 design system (oklch tokens)
+  sign-in/  sign-up/  # Clerk auth pages (redirect home when auth is off)
+  auth-provider.tsx   # optional ClerkProvider wrapper
+proxy.ts              # route protection (Next 16 proxy convention)
 components/
   ui/               # shadcn primitives
   layout/           # sidebar, top-bar, command-palette, app-shell, nav
@@ -42,7 +66,9 @@ features/
   chat/             # chat-panel, message-list, composer, empty-view
 lib/
   ai/               # provider registry + prompt library
-  brand.ts  events.ts  utils.ts
+  auth/             # getCurrentUser (Clerk + guest fallback)
+  db/               # Drizzle schema, client, conversation repository, migrations
+  config.ts  types.ts  brand.ts  events.ts  utils.ts
 ```
 
 ### Design principles
@@ -55,8 +81,11 @@ lib/
 
 ## Roadmap
 
-- **Phase 2 — Foundations:** auth, Postgres + Drizzle, persist conversations.
-- **Phase 3 — Multi-page features:** legal advice, contract drafting/analysis,
-  documents, reports, templates, marketplace.
+- ✅ **Phase 1 — Working chat** with a provider-agnostic engine.
+- ✅ **Phase 2 — Foundations:** optional Clerk auth, Postgres + Drizzle,
+  conversation persistence, route protection.
+- ✅ **Phase 3 — Multi-page features:** legal advice, contract
+  drafting/analysis, and landing pages for documents/reports/templates/etc.
 - **Phase 4 — Advanced AI:** RAG document analysis, tool calling, web search.
-- **Phase 5 — Productionize:** billing/credits, rate limits, observability, CI.
+- **Phase 5 — Productionize:** billing/credits enforcement, rate limits,
+  observability, CI.
