@@ -17,18 +17,22 @@ import {
 } from "lucide-react";
 import { BrandAvatar } from "@/components/layout/brand-mark";
 
+export type ChatContext = { label: string; sub: string };
+
 export function MessageList({
   messages,
   isLoading,
   status,
   onStop,
   onRegenerate,
+  context,
 }: {
   messages: UIMessage[];
   isLoading: boolean;
   status: string;
   onStop: () => void;
   onRegenerate: () => void;
+  context: ChatContext;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [atBottom, setAtBottom] = useState(true);
@@ -59,11 +63,11 @@ export function MessageList({
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-6 py-3">
           <div className="flex min-w-0 items-center gap-2.5">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border-strong/60 bg-surface/70 px-2.5 py-1 text-[11px] font-medium text-foreground">
-              <Scale className="size-3 text-primary" /> Legal Advice
+              <Scale className="size-3 text-primary" /> {context.label}
             </span>
             <span className="hidden text-[11px] text-muted-foreground sm:inline">·</span>
             <span className="hidden truncate text-[11px] text-muted-foreground sm:inline">
-              Private consultation · India jurisdiction
+              {context.sub}
             </span>
           </div>
           <div className="flex items-center gap-2">

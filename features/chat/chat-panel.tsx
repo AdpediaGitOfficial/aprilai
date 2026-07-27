@@ -1,20 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { EmptyView } from "./empty-view";
-import { MessageList } from "./message-list";
+import { MessageList, type ChatContext } from "./message-list";
 import { Composer } from "./composer";
 import { onNewChat } from "@/lib/events";
 import type { PromptKey } from "@/lib/ai/prompts";
 
+const DEFAULT_CONTEXT: ChatContext = {
+  label: "Legal Advice",
+  sub: "Private consultation · India jurisdiction",
+};
+
 export function ChatPanel({
   promptKey = "general",
   showProCta = true,
+  context = DEFAULT_CONTEXT,
 }: {
   promptKey?: PromptKey;
   showProCta?: boolean;
+  context?: ChatContext;
 }) {
   const [input, setInput] = useState("");
   const [webSearch, setWebSearch] = useState(true);
@@ -35,15 +42,15 @@ export function ChatPanel({
     setInput("");
   };
 
-  const newConversation = () => {
+  const newConversation = useCallback(() => {
     stop();
     setMessages([]);
     setInput("");
     setChatId(crypto.randomUUID());
-  };
+  }, [stop, setMessages]);
 
   // Reset when the shell (sidebar / palette) requests a new chat.
-  useEffect(() => onNewChat(newConversation), []);
+  useEffect(() => onNewChat(newConversation), [newConversation]);
 
   return (
     <>
@@ -54,6 +61,7 @@ export function ChatPanel({
           status={status}
           onStop={stop}
           onRegenerate={() => regenerate()}
+          context={context}
         />
       ) : (
         <EmptyView onPick={submit} />
