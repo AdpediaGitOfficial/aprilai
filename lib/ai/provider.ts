@@ -22,6 +22,16 @@ function resolveProvider(): ProviderId {
 }
 
 /**
+ * Whether the active provider has an API key. When false, the chat falls back
+ * to a local demo stream so the app is fully usable with zero configuration.
+ */
+export function isProviderConfigured(): boolean {
+  return resolveProvider() === "openai"
+    ? Boolean(process.env.OPENAI_API_KEY)
+    : Boolean(process.env.ANTHROPIC_API_KEY);
+}
+
+/**
  * Returns a configured language model for the active provider.
  * @param modelId optional explicit model id; falls back to `AI_MODEL`, then the
  *                provider default.

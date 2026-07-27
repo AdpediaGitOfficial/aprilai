@@ -1,7 +1,8 @@
 import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai";
-import { getModel } from "@/lib/ai/provider";
+import { getModel, isProviderConfigured } from "@/lib/ai/provider";
 import { getSystemPrompt, type PromptKey } from "@/lib/ai/prompts";
 import { buildTools } from "@/lib/ai/tools";
+import { streamDemoResponse } from "@/lib/ai/demo";
 import { dbEnabled } from "@/lib/config";
 import { getCurrentUser } from "@/lib/auth/user";
 import { saveConversation } from "@/lib/db/conversations";
@@ -26,6 +27,12 @@ export async function POST(request: Request) {
   const { id, messages, promptKey = "general", webSearch = false } = body;
   if (!Array.isArray(messages)) {
     return new Response("Messages are required", { status: 400 });
+  }
+
+  // Zero-config demo mode: no provider key → stream a local placeholder reply so
+  // the app is fully usable without any keys or external services.
+  if (!isProviderConfigured()) {
+    return streamDemoResponse(messages as UIMessage[]);
   }
 
   try {
