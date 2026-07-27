@@ -224,20 +224,14 @@ function MessageBubble({
 
   if (isUser) {
     return (
-      <div className="group/turn flex justify-end gap-3 py-4">
+      <div className="group/turn flex justify-end py-4">
         <div className="flex max-w-[85%] flex-col items-end sm:max-w-[75%]">
-          <div className="mb-1 flex items-center gap-2">
-            <span className="text-[10px] uppercase tracking-widest text-muted-foreground opacity-0 transition-opacity group-hover/turn:opacity-100">
-              {time}
-            </span>
-            <span className="text-[11px] font-medium text-foreground">You</span>
+          <div className="mb-1 pr-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+            You <span className="opacity-0 transition-opacity group-hover/turn:opacity-100">· {time}</span>
           </div>
-          <div className="rounded-2xl rounded-tr-md bg-gradient-brand px-4 py-2.5 text-[14px] leading-relaxed text-primary-foreground shadow-glow">
+          <div className="rounded-2xl rounded-tr-md border border-border-strong bg-surface px-4 py-2.5 text-[14px] leading-relaxed text-foreground shadow-elevated">
             <p className="whitespace-pre-wrap">{text}</p>
           </div>
-        </div>
-        <div className="mt-6 grid size-8 shrink-0 place-items-center rounded-lg border border-border-strong bg-surface text-[11px] font-semibold text-foreground">
-          You
         </div>
       </div>
     );
