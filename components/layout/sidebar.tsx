@@ -18,15 +18,25 @@ const SAMPLE_CHATS = [
   "Delaware filing checklist",
 ];
 
-export function Sidebar({
-  onOpenPalette,
-  user,
-  conversations,
-}: {
+type SidebarProps = {
   onOpenPalette: () => void;
   user: AppUser;
   conversations: ConversationSummary[];
-}) {
+  /** Called when a nav item / action is chosen — used to close the mobile drawer. */
+  onNavigate?: () => void;
+};
+
+/** Desktop rail: the sidebar content inside a fixed aside, shown only ≥ lg. */
+export function Sidebar(props: Omit<SidebarProps, "onNavigate">) {
+  return (
+    <aside className="hidden w-72 shrink-0 border-r border-border bg-surface/60 backdrop-blur-xl lg:block">
+      <SidebarContent {...props} />
+    </aside>
+  );
+}
+
+/** Shared content used by both the desktop rail and the mobile drawer. */
+export function SidebarContent({ onOpenPalette, user, conversations, onNavigate }: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const initials = user.name
@@ -39,10 +49,11 @@ export function Sidebar({
   const startNewChat = () => {
     if (pathname !== "/") router.push("/");
     emitNewChat();
+    onNavigate?.();
   };
 
   return (
-    <aside className="relative hidden w-72 shrink-0 flex-col border-r border-border bg-surface/60 backdrop-blur-xl lg:flex">
+    <div className="flex h-full flex-col">
       <div className="flex items-center px-5 pt-6 pb-5">
         {/* Light logo (default). eslint-disable-next-line @next/next/no-img-element -- SVG logo, auto width */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -85,7 +96,12 @@ export function Sidebar({
       <nav className="flex-1 overflow-y-auto scrollbar-thin px-3 pb-4">
         <ul className="space-y-0.5">
           {primaryNav.map((item) => (
-            <NavRow key={item.href} item={item} active={isActive(pathname, item.href)} />
+            <NavRow
+              key={item.href}
+              item={item}
+              active={isActive(pathname, item.href)}
+              onNavigate={onNavigate}
+            />
           ))}
         </ul>
 
@@ -101,6 +117,7 @@ export function Sidebar({
                 <Link
                   key={c.id}
                   href={`/?c=${c.id}`}
+                  onClick={onNavigate}
                   className="block w-full truncate rounded-md px-3 py-1.5 text-left text-xs text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
                 >
                   {c.title}
@@ -165,7 +182,7 @@ export function Sidebar({
           <ChevronDown className="size-4 text-muted-foreground" />
         )}
       </div>
-    </aside>
+    </div>
   );
 }
 
@@ -174,12 +191,21 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(href + "/");
 }
 
-function NavRow({ item, active }: { item: NavItem; active: boolean }) {
+function NavRow({
+  item,
+  active,
+  onNavigate,
+}: {
+  item: NavItem;
+  active: boolean;
+  onNavigate?: () => void;
+}) {
   const Icon = item.icon;
   return (
     <li>
       <Link
         href={item.href}
+        onClick={onNavigate}
         className={
           "group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors " +
           (active

@@ -2,11 +2,18 @@
 
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Search, Globe, Bell, Command as CommandIcon, Plus } from "lucide-react";
+import { Search, Globe, Bell, Command as CommandIcon, Plus, Menu } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { emitNewChat } from "@/lib/events";
+import { BRAND } from "@/lib/brand";
 
-export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
+export function TopBar({
+  onOpenPalette,
+  onOpenMobileNav,
+}: {
+  onOpenPalette: () => void;
+  onOpenMobileNav: () => void;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const [lang, setLang] = useState("English");
@@ -20,7 +27,31 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
   return (
     <header className="relative z-10 flex h-14 items-center justify-between gap-4 border-b border-border bg-background/40 px-6 backdrop-blur-xl">
       <div className="flex min-w-0 items-center gap-3">
-        <div className="flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1">
+        {/* Mobile: hamburger + logo (the sidebar is hidden below lg) */}
+        <button
+          onClick={onOpenMobileNav}
+          aria-label="Open navigation menu"
+          className="grid size-9 shrink-0 place-items-center rounded-lg border border-border bg-surface/60 text-muted-foreground transition-colors hover:text-foreground lg:hidden"
+        >
+          <Menu className="size-5" />
+        </button>
+        <div className="flex items-center lg:hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={BRAND.logo}
+            alt={BRAND.name}
+            className="h-7 w-auto max-w-[130px] object-contain object-left dark:hidden"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={BRAND.logoWhite}
+            alt={BRAND.name}
+            className="hidden h-7 w-auto max-w-[130px] object-contain object-left dark:block"
+          />
+        </div>
+
+        {/* Desktop: agent status pill */}
+        <div className="hidden items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1 lg:flex">
           <span className="relative flex size-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-70" />
             <span className="relative inline-flex size-1.5 rounded-full bg-primary" />
@@ -31,7 +62,7 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
         </div>
         <button
           onClick={startNewChat}
-          className="hidden items-center gap-1.5 rounded-md border border-border bg-surface/60 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-border-strong transition-all md:inline-flex"
+          className="hidden items-center gap-1.5 rounded-md border border-border bg-surface/60 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-border-strong transition-all lg:inline-flex"
         >
           <Plus className="size-3.5" /> New chat
         </button>
