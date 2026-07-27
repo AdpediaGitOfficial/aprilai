@@ -1,0 +1,182 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * April AI — Futuristic Legal Intelligence Design System
+ * Deep space canvas, iridescent accent, precision typography.
+ * All colors in oklch. Never hardcode colors in components.
+ */
+
+@theme inline {
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-glow: var(--primary-glow);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --shadow-glow: 0 0 40px -8px color-mix(in oklab, var(--primary) 55%, transparent);
+  --shadow-elevated: 0 24px 60px -20px oklch(0 0 0 / 0.6), 0 2px 0 0 oklch(1 0 0 / 0.04) inset;
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Deep space canvas */
+  --background: oklch(0.14 0.02 265);
+  --foreground: oklch(0.97 0.01 250);
+
+  --surface: oklch(0.17 0.022 265);
+  --surface-elevated: oklch(0.2 0.025 265);
+
+  --card: oklch(0.18 0.023 265);
+  --card-foreground: oklch(0.97 0.01 250);
+
+  --popover: oklch(0.19 0.024 265);
+  --popover-foreground: oklch(0.97 0.01 250);
+
+  /* April primary — #825dff */
+  --primary: oklch(0.6 0.22 289);
+  --primary-foreground: oklch(0.98 0.005 250);
+  --primary-glow: oklch(0.72 0.18 300);
+
+  --secondary: oklch(0.24 0.03 275);
+  --secondary-foreground: oklch(0.97 0.01 250);
+
+  --accent: oklch(0.78 0.14 220);
+  --accent-foreground: oklch(0.14 0.02 265);
+
+  --muted: oklch(0.22 0.025 270);
+  --muted-foreground: oklch(0.68 0.02 265);
+
+  --destructive: oklch(0.65 0.24 25);
+  --destructive-foreground: oklch(0.98 0.005 250);
+
+  --border: oklch(1 0 0 / 0.07);
+  --border-strong: oklch(1 0 0 / 0.14);
+  --input: oklch(1 0 0 / 0.08);
+  --ring: oklch(0.6 0.22 289);
+
+  /* Brand gradient — violet #825dff → magenta → cyan halo */
+  --gradient-brand: linear-gradient(
+    135deg,
+    oklch(0.55 0.24 285) 0%,
+    oklch(0.66 0.22 310) 50%,
+    oklch(0.78 0.14 220) 100%
+  );
+  --gradient-brand-soft: linear-gradient(
+    135deg,
+    oklch(0.6 0.22 289 / 0.22),
+    oklch(0.66 0.22 310 / 0.16),
+    oklch(0.78 0.14 220 / 0.12)
+  );
+  --gradient-surface: radial-gradient(1200px 600px at 15% -10%, oklch(0.6 0.22 289 / 0.22), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, oklch(0.66 0.22 310 / 0.16), transparent 55%),
+    radial-gradient(700px 500px at 80% 100%, oklch(0.78 0.14 220 / 0.1), transparent 60%);
+}
+
+.dark {
+  --background: oklch(0.14 0.02 265);
+  --foreground: oklch(0.97 0.01 250);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html,
+  body {
+    height: 100%;
+  }
+  body {
+    background-color: var(--color-background);
+    background-image: var(--gradient-surface);
+    background-attachment: fixed;
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 35%, transparent);
+    color: var(--foreground);
+  }
+}
+
+@utility text-gradient-brand {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility bg-gradient-brand {
+  background: var(--gradient-brand);
+}
+
+@utility ring-glow {
+  box-shadow: 0 0 0 1px var(--border-strong), var(--shadow-glow);
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+@keyframes grid-pan {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+@utility bg-grid {
+  background-image: linear-gradient(to right, oklch(1 0 0 / 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.035) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+@keyframes pulse-ring {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
