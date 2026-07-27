@@ -3,9 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Plus, Search, Settings, Sparkles, ChevronDown, Command as CommandIcon, LogOut } from "lucide-react";
+import { Plus, Search, Sparkles, ChevronDown, Command as CommandIcon, LogOut } from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
-import { BrandMark } from "./brand-mark";
 import { primaryNav, type NavItem } from "./nav";
 import { BRAND } from "@/lib/brand";
 import { emitNewChat } from "@/lib/events";
@@ -44,19 +43,21 @@ export function Sidebar({
 
   return (
     <aside className="relative hidden w-72 shrink-0 flex-col border-r border-border bg-surface/60 backdrop-blur-xl lg:flex">
-      <div className="flex items-center gap-3 px-4 pt-5 pb-4">
-        <BrandMark />
-        <div className="min-w-0 flex-1">
-          <p className="truncate font-display text-sm font-semibold tracking-tight text-foreground">
-            The {BRAND.name}
-          </p>
-          <p className="truncate text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
-            You <span className="text-primary">^</span> AI
-          </p>
-        </div>
-        <button className="grid size-7 place-items-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors">
-          <Settings className="size-4" />
-        </button>
+      <div className="flex items-center px-5 pt-6 pb-5">
+        {/* Light logo (default). eslint-disable-next-line @next/next/no-img-element -- SVG logo, auto width */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={BRAND.logo}
+          alt={BRAND.name}
+          className="h-9 w-auto max-w-[200px] object-contain object-left dark:hidden"
+        />
+        {/* White logo for dark mode. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={BRAND.logoWhite}
+          alt={BRAND.name}
+          className="hidden h-9 w-auto max-w-[200px] object-contain object-left dark:block"
+        />
       </div>
 
       <div className="px-4 pb-3">

@@ -7,5 +7,6 @@ export const BRAND = {
   name: "April AI",
   shortName: "April",
   tagline: "Legal Intelligence Workspace",
-  logo: "/april-logo.png",
+  logo: "/logo-main.svg",
+  logoWhite: "/loogo-white.svg",
 } as const;

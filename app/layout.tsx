@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "April AI — Legal Intelligence Workspace",
     description: "Futuristic AI legal counsel for drafting, analysis, and research.",
   },
-  icons: { icon: "/favicon.ico" },
+  // Favicon is provided by the app/icon.svg file convention.
 };
 
 export default function RootLayout({
