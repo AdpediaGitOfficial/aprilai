@@ -1,21 +1,20 @@
-import Image from "next/image";
-import { BRAND } from "@/lib/brand";
+import { Scale } from "lucide-react";
 
+/**
+ * April's brand mark: a gradient tile with a scales glyph. Reads crisply on
+ * both the light paper and dark grounds (unlike the wide wordmark image, which
+ * is optimized for dark only). Swap in a light-optimized logo here later.
+ */
 export function BrandMark({ size = 40 }: { size?: number }) {
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <div
-        className="absolute -inset-2 rounded-2xl blur-xl opacity-60"
+        className="absolute -inset-1.5 rounded-2xl blur-lg opacity-45"
         style={{ background: "var(--gradient-brand)" }}
       />
-      <Image
-        src={BRAND.logo}
-        alt={`${BRAND.name} logo`}
-        width={size}
-        height={size}
-        className="relative h-full w-full rounded-md object-contain drop-shadow-[0_2px_10px_color-mix(in_oklab,var(--primary)_55%,transparent)]"
-        priority
-      />
+      <div className="relative grid h-full w-full place-items-center rounded-xl bg-gradient-brand text-primary-foreground shadow-glow">
+        <Scale style={{ width: size * 0.5, height: size * 0.5 }} strokeWidth={1.9} />
+      </div>
     </div>
   );
 }
@@ -29,13 +28,7 @@ export function BrandAvatar({ className = "" }: { className?: string }) {
         className
       }
     >
-      <Image
-        src={BRAND.logo}
-        alt={BRAND.shortName}
-        width={20}
-        height={20}
-        className="size-5 rounded-sm object-contain"
-      />
+      <Scale className="size-[55%]" strokeWidth={1.9} />
     </div>
   );
 }

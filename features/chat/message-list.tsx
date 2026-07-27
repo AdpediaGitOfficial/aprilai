@@ -232,8 +232,7 @@ function MessageBubble({
             </span>
             <span className="text-[11px] font-medium text-foreground">You</span>
           </div>
-          <div className="relative overflow-hidden rounded-2xl rounded-tr-md border border-border-strong/70 bg-surface/80 px-4 py-2.5 text-[14px] leading-relaxed text-foreground shadow-elevated">
-            <span aria-hidden className="absolute inset-y-0 right-0 w-[3px] bg-gradient-brand" />
+          <div className="rounded-2xl rounded-tr-md bg-gradient-brand px-4 py-2.5 text-[14px] leading-relaxed text-primary-foreground shadow-glow">
             <p className="whitespace-pre-wrap">{text}</p>
           </div>
         </div>
@@ -258,8 +257,10 @@ function MessageBubble({
           </span>
         </div>
         <ToolPills activity={activity} />
-        <div className="prose prose-invert prose-sm max-w-[65ch] prose-p:leading-relaxed prose-headings:font-display prose-a:text-primary prose-code:text-primary prose-pre:bg-surface prose-pre:border prose-pre:border-border">
-          <ReactMarkdown>{text || "​"}</ReactMarkdown>
+        <div className="rounded-2xl border border-border bg-surface p-5 shadow-elevated">
+          <div className="prose prose-sm max-w-[65ch] prose-p:leading-relaxed prose-headings:font-display prose-a:text-primary prose-code:text-primary prose-pre:bg-muted prose-pre:border prose-pre:border-border">
+            <ReactMarkdown>{text || "​"}</ReactMarkdown>
+          </div>
         </div>
         {isLast && isLoading ? (
           <button

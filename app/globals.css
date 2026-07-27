@@ -4,13 +4,13 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * April AI — Futuristic Legal Intelligence Design System
- * Deep space canvas, iridescent accent, precision typography.
- * All colors in oklch. Never hardcode colors in components.
+ * April AI — Premium Light Design System
+ * Cool violet-tinted paper, restrained iridescent accent, serif display.
+ * All colors as tokens. Never hardcode colors in components.
  */
 
 @theme inline {
-  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-newsreader), ui-serif, Georgia, "Times New Roman", serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 
@@ -46,69 +46,112 @@
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
 
-  --shadow-glow: 0 0 40px -8px color-mix(in oklab, var(--primary) 55%, transparent);
-  --shadow-elevated: 0 24px 60px -20px oklch(0 0 0 / 0.6), 0 2px 0 0 oklch(1 0 0 / 0.04) inset;
+  --shadow-glow: 0 10px 34px -10px color-mix(in oklab, var(--primary) 42%, transparent);
+  --shadow-elevated: 0 2px 6px rgb(26 27 46 / 0.05), 0 20px 44px -22px rgb(45 30 120 / 0.28);
 }
 
+/* ── Light (default) ─────────────────────────────────────────── */
 :root {
-  --radius: 0.75rem;
+  --radius: 0.85rem;
 
-  /* Deep space canvas */
-  --background: oklch(0.14 0.02 265);
-  --foreground: oklch(0.97 0.01 250);
+  /* Cool violet-tinted paper */
+  --background: #f4f5fb;
+  --foreground: #1a1b2e;
 
-  --surface: oklch(0.17 0.022 265);
-  --surface-elevated: oklch(0.2 0.025 265);
+  --surface: #ffffff;
+  --surface-elevated: #fbfbfe;
 
-  --card: oklch(0.18 0.023 265);
-  --card-foreground: oklch(0.97 0.01 250);
+  --card: #ffffff;
+  --card-foreground: #1a1b2e;
 
-  --popover: oklch(0.19 0.024 265);
-  --popover-foreground: oklch(0.97 0.01 250);
+  --popover: #ffffff;
+  --popover-foreground: #1a1b2e;
 
-  /* April primary — #825dff */
-  --primary: oklch(0.6 0.22 289);
-  --primary-foreground: oklch(0.98 0.005 250);
-  --primary-glow: oklch(0.72 0.18 300);
+  /* April primary — #6d4aff */
+  --primary: #6d4aff;
+  --primary-foreground: #ffffff;
+  --primary-glow: #9a6bff;
 
-  --secondary: oklch(0.24 0.03 275);
-  --secondary-foreground: oklch(0.97 0.01 250);
+  --secondary: #edeef7;
+  --secondary-foreground: #1a1b2e;
 
-  --accent: oklch(0.78 0.14 220);
-  --accent-foreground: oklch(0.14 0.02 265);
+  /* Kept neutral so UI hover states don't tint; brand cyan lives in gradients */
+  --accent: #edeef7;
+  --accent-foreground: #1a1b2e;
 
-  --muted: oklch(0.22 0.025 270);
-  --muted-foreground: oklch(0.68 0.02 265);
+  --muted: #edeef7;
+  --muted-foreground: #6b6f84;
 
-  --destructive: oklch(0.65 0.24 25);
-  --destructive-foreground: oklch(0.98 0.005 250);
+  --destructive: #e5484d;
+  --destructive-foreground: #ffffff;
 
-  --border: oklch(1 0 0 / 0.07);
-  --border-strong: oklch(1 0 0 / 0.14);
-  --input: oklch(1 0 0 / 0.08);
-  --ring: oklch(0.6 0.22 289);
+  --border: #e7e8f2;
+  --border-strong: #d8dae8;
+  --input: #e7e8f2;
+  --ring: #6d4aff;
 
-  /* Brand gradient — violet #825dff → magenta → cyan halo */
-  --gradient-brand: linear-gradient(
-    135deg,
-    oklch(0.55 0.24 285) 0%,
-    oklch(0.66 0.22 310) 50%,
-    oklch(0.78 0.14 220) 100%
-  );
+  --grid-line: rgb(26 27 46 / 0.045);
+
+  /* Brand gradient — violet → magenta → cyan halo */
+  --gradient-brand: linear-gradient(118deg, #7c5cff 0%, #a559ff 46%, #37c6dd 100%);
   --gradient-brand-soft: linear-gradient(
-    135deg,
-    oklch(0.6 0.22 289 / 0.22),
-    oklch(0.66 0.22 310 / 0.16),
-    oklch(0.78 0.14 220 / 0.12)
+    118deg,
+    rgb(124 92 255 / 0.14),
+    rgb(165 89 255 / 0.1),
+    rgb(55 198 221 / 0.1)
   );
-  --gradient-surface: radial-gradient(1200px 600px at 15% -10%, oklch(0.6 0.22 289 / 0.22), transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, oklch(0.66 0.22 310 / 0.16), transparent 55%),
-    radial-gradient(700px 500px at 80% 100%, oklch(0.78 0.14 220 / 0.1), transparent 60%);
+  /* Soft iridescent aura on paper */
+  --gradient-surface: radial-gradient(720px 420px at 62% -8%, rgb(124 92 255 / 0.16), transparent 60%),
+    radial-gradient(560px 380px at 96% 6%, rgb(55 198 221 / 0.1), transparent 62%);
 }
 
-.dark {
-  --background: oklch(0.14 0.02 265);
-  --foreground: oklch(0.97 0.01 250);
+/* ── Dark (refined; available via .dark or data-theme) ───────── */
+.dark,
+:root[data-theme="dark"] {
+  --background: #0c0d16;
+  --foreground: #f1f2fa;
+
+  --surface: #161826;
+  --surface-elevated: #1b1d2c;
+
+  --card: #161826;
+  --card-foreground: #f1f2fa;
+
+  --popover: #1b1d2c;
+  --popover-foreground: #f1f2fa;
+
+  --primary: #8a6dff;
+  --primary-foreground: #ffffff;
+  --primary-glow: #b070ff;
+
+  --secondary: #22243a;
+  --secondary-foreground: #f1f2fa;
+
+  --accent: #22243a;
+  --accent-foreground: #f1f2fa;
+
+  --muted: #1e2032;
+  --muted-foreground: #9ea2b8;
+
+  --destructive: #f0575c;
+  --destructive-foreground: #ffffff;
+
+  --border: rgb(255 255 255 / 0.09);
+  --border-strong: rgb(255 255 255 / 0.16);
+  --input: rgb(255 255 255 / 0.09);
+  --ring: #8a6dff;
+
+  --grid-line: rgb(255 255 255 / 0.05);
+
+  --gradient-brand: linear-gradient(118deg, #8a6dff 0%, #b070ff 46%, #45cfe6 100%);
+  --gradient-brand-soft: linear-gradient(
+    118deg,
+    rgb(124 92 255 / 0.2),
+    rgb(165 89 255 / 0.14),
+    rgb(55 198 221 / 0.12)
+  );
+  --gradient-surface: radial-gradient(760px 440px at 62% -10%, rgb(124 92 255 / 0.18), transparent 60%),
+    radial-gradient(560px 380px at 98% 6%, rgb(55 198 221 / 0.1), transparent 62%);
 }
 
 @layer base {
@@ -127,9 +170,10 @@
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
   ::selection {
-    background: color-mix(in oklab, var(--primary) 35%, transparent);
+    background: color-mix(in oklab, var(--primary) 22%, transparent);
     color: var(--foreground);
   }
 }
@@ -159,14 +203,14 @@
     background-position: 0 0;
   }
   100% {
-    background-position: 40px 40px;
+    background-position: 46px 46px;
   }
 }
 
 @utility bg-grid {
-  background-image: linear-gradient(to right, oklch(1 0 0 / 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, oklch(1 0 0 / 0.035) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 46px 46px;
 }
 
 @keyframes pulse-ring {

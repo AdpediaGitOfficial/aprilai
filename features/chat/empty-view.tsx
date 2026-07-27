@@ -16,14 +16,14 @@ import {
 type PromptChip = { icon: LucideIcon; label: string; tint: string };
 
 const prompts: PromptChip[] = [
-  { icon: FileText, label: "Draft an NDA contract.", tint: "text-violet-300" },
-  { icon: Flame, label: "What are my rights when getting fired?", tint: "text-orange-300" },
-  { icon: FilePlus2, label: "Create a rental agreement.", tint: "text-amber-300" },
-  { icon: TrendingUp, label: "Steps to start a company.", tint: "text-emerald-300" },
-  { icon: Heart, label: "Checklist before marriage.", tint: "text-rose-300" },
-  { icon: HelpCircle, label: "How to file a consumer complaint?", tint: "text-cyan-300" },
-  { icon: Calculator, label: "Duties of an accountant?", tint: "text-fuchsia-300" },
-  { icon: ShieldCheck, label: "How to protect intellectual property?", tint: "text-teal-300" },
+  { icon: FileText, label: "Draft an NDA contract.", tint: "text-violet-500" },
+  { icon: Flame, label: "What are my rights when getting fired?", tint: "text-orange-500" },
+  { icon: FilePlus2, label: "Create a rental agreement.", tint: "text-amber-500" },
+  { icon: TrendingUp, label: "Steps to start a company.", tint: "text-emerald-500" },
+  { icon: Heart, label: "Checklist before marriage.", tint: "text-rose-500" },
+  { icon: HelpCircle, label: "How to file a consumer complaint?", tint: "text-cyan-600" },
+  { icon: Calculator, label: "Duties of an accountant?", tint: "text-fuchsia-500" },
+  { icon: ShieldCheck, label: "How to protect intellectual property?", tint: "text-teal-500" },
 ];
 
 export function EmptyView({ onPick }: { onPick: (text: string) => void }) {
@@ -46,9 +46,9 @@ export function EmptyView({ onPick }: { onPick: (text: string) => void }) {
               <button
                 key={p.label}
                 onClick={() => onPick(p.label)}
-                className="group inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3.5 py-2 text-sm text-muted-foreground backdrop-blur hover:border-border-strong hover:bg-surface-elevated hover:text-foreground hover:shadow-glow transition-all"
+                className="group inline-flex items-center gap-2.5 rounded-xl border border-border bg-surface px-4 py-2.5 text-[13.5px] font-medium text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg"
               >
-                <Icon className={"size-3.5 " + p.tint} />
+                <Icon className={"size-4 " + p.tint} />
                 <span>{p.label}</span>
               </button>
             );
@@ -66,12 +66,14 @@ function Hero() {
         <Scale className="size-3 text-primary" />
         Legal intelligence · v2 model
       </div>
-      <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-        <span className="text-gradient-brand">Try these prompts</span>
+      <h1 className="font-display text-4xl font-medium leading-[1.05] tracking-tight text-balance sm:text-[3.4rem]">
+        Ask April,
+        <br />
+        get <span className="text-gradient-brand italic">precise counsel.</span>
       </h1>
-      <p className="mt-3 max-w-lg text-sm text-muted-foreground">
-        Ask April anything about contracts, compliance, or case law. Get precise, cited counsel in
-        seconds.
+      <p className="mt-4 max-w-md text-[15px] leading-relaxed text-muted-foreground">
+        Draft, review, and research contracts, compliance, and case law — cited, jurisdiction-aware,
+        in seconds.
       </p>
     </div>
   );
