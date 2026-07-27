@@ -92,17 +92,17 @@
 
   --grid-line: rgb(26 27 46 / 0.045);
 
-  /* Brand gradient — violet → magenta → cyan halo */
-  --gradient-brand: linear-gradient(118deg, #7c5cff 0%, #a559ff 46%, #37c6dd 100%);
+  /* Brand gradient — violet blend (#754fef → #7e39ff → #613aff) */
+  --gradient-brand: linear-gradient(118deg, #754fef 0%, #7e39ff 50%, #613aff 100%);
   --gradient-brand-soft: linear-gradient(
     118deg,
-    rgb(124 92 255 / 0.14),
-    rgb(165 89 255 / 0.1),
-    rgb(55 198 221 / 0.1)
+    rgb(117 79 239 / 0.14),
+    rgb(126 57 255 / 0.1),
+    rgb(97 58 255 / 0.1)
   );
-  /* Soft iridescent aura on paper */
-  --gradient-surface: radial-gradient(720px 420px at 62% -8%, rgb(124 92 255 / 0.16), transparent 60%),
-    radial-gradient(560px 380px at 96% 6%, rgb(55 198 221 / 0.1), transparent 62%);
+  /* Soft aura on paper */
+  --gradient-surface: radial-gradient(720px 420px at 62% -8%, rgb(117 79 239 / 0.16), transparent 60%),
+    radial-gradient(560px 380px at 96% 6%, rgb(126 57 255 / 0.1), transparent 62%);
 }
 
 /* ── Dark (refined; available via .dark or data-theme) ───────── */
@@ -143,15 +143,15 @@
 
   --grid-line: rgb(255 255 255 / 0.05);
 
-  --gradient-brand: linear-gradient(118deg, #8a6dff 0%, #b070ff 46%, #45cfe6 100%);
+  --gradient-brand: linear-gradient(118deg, #7e5cff 0%, #7e39ff 50%, #6a45ff 100%);
   --gradient-brand-soft: linear-gradient(
     118deg,
-    rgb(124 92 255 / 0.2),
-    rgb(165 89 255 / 0.14),
-    rgb(55 198 221 / 0.12)
+    rgb(117 79 239 / 0.2),
+    rgb(126 57 255 / 0.14),
+    rgb(97 58 255 / 0.12)
   );
-  --gradient-surface: radial-gradient(760px 440px at 62% -10%, rgb(124 92 255 / 0.18), transparent 60%),
-    radial-gradient(560px 380px at 98% 6%, rgb(55 198 221 / 0.1), transparent 62%);
+  --gradient-surface: radial-gradient(760px 440px at 62% -10%, rgb(126 57 255 / 0.18), transparent 60%),
+    radial-gradient(560px 380px at 98% 6%, rgb(117 79 239 / 0.1), transparent 62%);
 }
 
 @layer base {

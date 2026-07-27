@@ -9,4 +9,5 @@ export const BRAND = {
   tagline: "Legal Intelligence Workspace",
   logo: "/logo-main.svg",
   logoWhite: "/loogo-white.svg",
+  icon: "/Asset 1.svg",
 } as const;
