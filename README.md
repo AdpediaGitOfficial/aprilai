@@ -38,6 +38,8 @@ relevant keys:
 | AI responses          | `ANTHROPIC_API_KEY` (or `OPENAI_API_KEY`) | Chat streams real answers               |
 | Auth + route guard    | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` (+ secret) | Real users, `/sign-in`, protected app |
 | Conversation history  | `DATABASE_URL`                            | Chats persist and appear in the sidebar |
+| Web search tool       | `TAVILY_API_KEY`                          | Composer's "Web search" toggle works    |
+| Document analysis (RAG) | `DATABASE_URL` + `OPENAI_API_KEY`       | Upload docs; April retrieves + cites    |
 
 With a database set, run migrations once:
 
@@ -64,12 +66,25 @@ components/
   layout/           # sidebar, top-bar, command-palette, app-shell, nav
 features/
   chat/             # chat-panel, message-list, composer, empty-view
+  documents/        # RAG upload / list manager
 lib/
-  ai/               # provider registry + prompt library
+  ai/               # provider registry, prompts, embeddings, tools/
   auth/             # getCurrentUser (Clerk + guest fallback)
-  db/               # Drizzle schema, client, conversation repository, migrations
+  db/               # Drizzle schema, client, conversation + document repos, migrations
+  rag/              # extract (PDF/text), chunk, ingest pipeline
   config.ts  types.ts  brand.ts  events.ts  utils.ts
 ```
+
+### AI capabilities
+
+- **Tool calling** — the chat route assembles a tool set per request and runs
+  multi-step (`stopWhen: stepCountIs(5)`): call a tool → read result → answer.
+- **Web search** — a Tavily-backed tool, gated by `TAVILY_API_KEY` and the
+  composer's "Web search" toggle.
+- **RAG** — upload PDFs/text on the Documents page → extracted, chunked, and
+  embedded (OpenAI) into Postgres + pgvector. A `searchDocuments` retrieval tool
+  lets April ground answers in your documents and cite them. Tool usage is shown
+  as pills in the chat.
 
 ### Design principles
 
@@ -86,6 +101,7 @@ lib/
   conversation persistence, route protection.
 - ✅ **Phase 3 — Multi-page features:** legal advice, contract
   drafting/analysis, and landing pages for documents/reports/templates/etc.
-- **Phase 4 — Advanced AI:** RAG document analysis, tool calling, web search.
+- ✅ **Phase 4 — Advanced AI:** tool calling, Tavily web search, and RAG
+  document analysis (pgvector) with citations.
 - **Phase 5 — Productionize:** billing/credits enforcement, rate limits,
   observability, CI.

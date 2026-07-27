@@ -43,7 +43,7 @@ export function ChatPanel({
   const submit = (text: string) => {
     const value = text.trim();
     if (!value || isLoading) return;
-    sendMessage({ text: value });
+    sendMessage({ text: value }, { body: { webSearch } });
     setInput("");
   };
 

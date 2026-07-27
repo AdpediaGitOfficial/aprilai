@@ -14,6 +14,9 @@ import {
   RefreshCw,
   ThumbsUp,
   ThumbsDown,
+  Globe,
+  FileSearch,
+  Wrench,
 } from "lucide-react";
 import { BrandAvatar } from "@/components/layout/brand-mark";
 
@@ -144,6 +147,52 @@ function messageText(message: UIMessage): string {
     .join("");
 }
 
+type ToolActivity = { key: string; label: string; icon: typeof Globe };
+
+const TOOL_LABELS: Record<string, { label: string; icon: typeof Globe }> = {
+  webSearch: { label: "Searched the web", icon: Globe },
+  searchDocuments: { label: "Searched your documents", icon: FileSearch },
+};
+
+/** Extracts which tools the assistant used, for a subtle activity indicator. */
+function toolActivity(message: UIMessage): ToolActivity[] {
+  const seen = new Set<string>();
+  const out: ToolActivity[] = [];
+  for (const part of message.parts) {
+    const type = part.type;
+    let name: string | null = null;
+    if (typeof type === "string" && type.startsWith("tool-")) {
+      name = type.slice("tool-".length);
+    } else if (type === "dynamic-tool") {
+      name = (part as { toolName?: string }).toolName ?? "tool";
+    }
+    if (!name || seen.has(name)) continue;
+    seen.add(name);
+    const meta = TOOL_LABELS[name] ?? { label: `Used ${name}`, icon: Wrench };
+    out.push({ key: name, label: meta.label, icon: meta.icon });
+  }
+  return out;
+}
+
+function ToolPills({ activity }: { activity: ToolActivity[] }) {
+  if (activity.length === 0) return null;
+  return (
+    <div className="mb-2 flex flex-wrap gap-1.5">
+      {activity.map((a) => {
+        const Icon = a.icon;
+        return (
+          <span
+            key={a.key}
+            className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-[10px] font-medium text-primary"
+          >
+            <Icon className="size-3" /> {a.label}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 function MessageBubble({
   message,
   isLast,
@@ -159,6 +208,7 @@ function MessageBubble({
 }) {
   const isUser = message.role === "user";
   const text = messageText(message);
+  const activity = isUser ? [] : toolActivity(message);
   const [copied, setCopied] = useState(false);
   const time = useMemo(
     () => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
@@ -207,6 +257,7 @@ function MessageBubble({
             {time}
           </span>
         </div>
+        <ToolPills activity={activity} />
         <div className="prose prose-invert prose-sm max-w-[65ch] prose-p:leading-relaxed prose-headings:font-display prose-a:text-primary prose-code:text-primary prose-pre:bg-surface prose-pre:border prose-pre:border-border">
           <ReactMarkdown>{text || "​"}</ReactMarkdown>
         </div>

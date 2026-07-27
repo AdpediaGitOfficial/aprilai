@@ -19,3 +19,12 @@ export type ConversationSummary = {
   title: string;
   updatedAt: Date;
 };
+
+export type DocumentSummary = {
+  id: string;
+  title: string;
+  contentType: string;
+  chunkCount: number;
+  status: string;
+  createdAt: Date;
+};
